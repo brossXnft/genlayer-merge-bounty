@@ -61,6 +61,16 @@ Run it locally with any static server: `python -m http.server` in the repository
 
 `tools/build.sh` rebuilds the same bytes (Rust 1.98.1, binaryen version_133) so the SHA-256 can be compared with the code the chain runs, for example with the verifier at https://brossxnft.github.io/genlayer-chunked-deploy/.
 
+Transactions that exercise the contract on Bradbury (all finalized with 5 validators unless noted):
+
+| What | GenLayer tx |
+|---|---|
+| Bounty #1: 1 GEN on [issue #1](https://github.com/brossXnft/genlayer-merge-bounty/issues/1); validators confirm through the GitHub API that the issue is open | [`0x7d5a6a5f80708d84…`](https://scan.bradbury.genlayer.com/tx/0x7d5a6a5f80708d84e2a83a496f410975ed26138e1f63a6fc1e9fc01f02182ae3) |
+| Claim with [PR #2](https://github.com/brossXnft/genlayer-merge-bounty/pull/2) (merged, `Closes #1`, payout line): 1 GEN sent to the payout address at finalization, contract balance back to 0 | [`0x907944fc91533d2d…`](https://scan.bradbury.genlayer.com/tx/0x907944fc91533d2d6c9dbbe760692c6cc0b4d1e3fdd521eb98b849340c75d089) |
+
+Refused in simulation before the real claim: claiming while PR #2 was still open (`PR #2 is not merged`) and claiming from the funder's wallet (`only the payout address in PR #2 … can claim`).
+Funder `0x70b4941eb04d153d87bb29bb8a5884af77d3401b`, contributor/payout `0x51f21e5c034b06824d95008582b78b948f6f812c` (both testnet wallets of the author).
+
 ## Build, test, deploy
 
 ```bash

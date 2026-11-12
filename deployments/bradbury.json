@@ -5,5 +5,18 @@
   "sha256": "7d659b368d128414615d715a76d965c33a6f9ec280a34d77565cf1702ff4680c",
   "size": 263446,
   "deploy_tx": "0xbb454f17b7830503686c22c0ca44ca14dedc826df0dc4986391454a9cddfff5d",
-  "evidence": []
+  "evidence": [
+    {
+      "what": "Bounty #1: 1 GEN on [issue #1](https://github.com/brossXnft/genlayer-merge-bounty/issues/1); validators confirm through the GitHub API that the issue is open",
+      "tx": "0x7d5a6a5f80708d84e2a83a496f410975ed26138e1f63a6fc1e9fc01f02182ae3"
+    },
+    {
+      "what": "Claim with [PR #2](https://github.com/brossXnft/genlayer-merge-bounty/pull/2) (merged, `Closes #1`, payout line): 1 GEN sent to the payout address at finalization, contract balance back to 0",
+      "tx": "0x907944fc91533d2d6c9dbbe760692c6cc0b4d1e3fdd521eb98b849340c75d089"
+    }
+  ],
+  "notes": [
+    "Refused in simulation before the real claim: claiming while PR #2 was still open (`PR #2 is not merged`) and claiming from the funder's wallet (`only the payout address in PR #2 \u2026 can claim`).",
+    "Funder `0x70b4941eb04d153d87bb29bb8a5884af77d3401b`, contributor/payout `0x51f21e5c034b06824d95008582b78b948f6f812c` (both testnet wallets of the author)."
+  ]
 }
