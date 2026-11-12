@@ -1,0 +1,15 @@
+[workspace]
+resolver = "3"
+members = ["contract", "glkit"]
+
+[workspace.dependencies]
+# Rust SDK from the GenVM executor, v0.3-dev branch (matches Bradbury GenVM v0.3.x)
+genlayer_sdk = { git = "https://github.com/genlayerlabs/genvm-executor", rev = "6ec6c39d8213cc4f6657697998058cc089b43957" }
+glkit = { path = "glkit" }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

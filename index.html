@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merge Bounty</title>
+  <meta name="description" content="GEN bounties on GitHub issues, paid when the fixing pull request is merged. GenLayer validators read GitHub themselves.">
+  <link rel="stylesheet" href="web/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>Merge Bounty</h1>
+      <span class="tag">GitHub issue bounties settled by GenLayer consensus</span>
+      <span class="spacer"></span>
+      <span class="net">GenLayer Bradbury · chain 4221</span>
+      <button id="connect" class="primary">Connect wallet</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h2>Fund an issue. Get paid when your fix is merged.</h2>
+      <p>Bounty platforms ask you to trust them to judge “done” and to hand over the money. Here the escrow is a GenLayer Intelligent Contract written in Rust. When a contributor claims, five validators each read the pull request from the GitHub API and pay out only if they agree it was merged into the right repository, before the deadline, and closes the issue.</p>
+    </section>
+
+    <div class="stats">
+      <div class="stat"><b id="s-count">–</b><span>bounties</span></div>
+      <div class="stat"><b id="s-escrow">–</b><span>in escrow</span></div>
+      <div class="stat"><b id="s-paid">–</b><span>paid to contributors</span></div>
+    </div>
+
+    <div id="activity"></div>
+
+    <section class="block">
+      <h2>Bounties</h2>
+      <div id="bounties" class="grid"><p class="muted">Loading…</p></div>
+    </section>
+
+    <section class="block">
+      <h2>Create a bounty</h2>
+      <div class="card">
+        <form id="create-form" class="stack">
+          <div class="row">
+            <label>Repository (owner/name)<input id="c-repo" required placeholder="genlayerlabs/genlayer-docs" autocomplete="off"></label>
+            <label>Issue number<input id="c-issue" type="number" min="1" required placeholder="123"></label>
+          </div>
+          <div class="row">
+            <label>Amount (GEN)<input id="c-amount" required value="1" inputmode="decimal"></label>
+            <label>Deadline (days)<input id="c-days" type="number" min="1" max="365" value="30" required></label>
+          </div>
+          <p id="c-preview" class="hint">The issue must exist and be open. Validators check this before the escrow is created.</p>
+          <div class="actions">
+            <button type="button" id="c-check">Check issue</button>
+            <button type="submit" class="primary">Create bounty</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>How it works</h2>
+      <div class="card">
+        <ol class="how">
+          <li><b>Fund.</b> Anyone escrows GEN on an open GitHub issue. Others can add to it.</li>
+          <li><b>Fix.</b> The contributor opens a PR whose description contains <code>Closes #&lt;issue&gt;</code> and a line <code>genlayer-payout: 0x…</code> with their address. The claim dialog writes both lines for you.</li>
+          <li><b>Merge.</b> The maintainer reviews and merges as usual. Merging is the acceptance.</li>
+          <li><b>Claim.</b> The payout wallet presses Claim. Validators read the PR from GitHub; on agreement the contract sends the escrow to that address when the transaction finalizes.</li>
+          <li><b>Refund.</b> If nobody claims by the deadline plus 3 days, each contributor takes back their own share.</li>
+        </ol>
+      </div>
+      <div class="trust" style="margin-top:12px">
+        <div class="card"><h3>No one judges “done”</h3><p>The rule is mechanical and public: merged, right repo, inside the window, closes the issue. The maintainer's merge is the only human decision.</p></div>
+        <div class="card"><h3>No custodian</h3><p>GEN sits in the contract's ghost account. It can only leave to the payout address in the merged PR, or back to the people who funded it.</p></div>
+        <div class="card"><h3>Independent reads</h3><p>The leader's view of GitHub is not trusted: every validator fetches the PR itself and the facts must match exactly, or no payout happens.</p></div>
+        <div class="card"><h3>Who can edit the payout line</h3><p>Only the PR author and the repo's maintainers can edit a PR description, and only the payout wallet can claim, so a third party cannot redirect or strand the payment.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="claim-dialog">
+    <h3 id="cl-title">Claim</h3>
+    <p class="hint" id="cl-who"></p>
+    <label>Put these lines in your PR description
+      <textarea id="cl-template" class="mono" rows="4" readonly></textarea>
+    </label>
+    <div class="actions" style="margin:8px 0 14px"><button id="cl-copy" type="button">Copy</button></div>
+    <label>Merged PR number<input id="cl-pr" type="number" min="1" placeholder="456"></label>
+    <p id="cl-preview" class="hint" style="margin-top:8px"></p>
+    <div class="actions" style="margin-top:12px">
+      <button id="cl-check" type="button">Check PR</button>
+      <button id="cl-submit" type="button" class="primary">Claim</button>
+      <button type="button" onclick="this.closest('dialog').close()">Cancel</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <footer>
+    <div class="wrap">
+      <span>Contract <a id="contract-link" target="_blank" rel="noopener">…</a> (Rust, genlayer_sdk)</span>
+      <span><a id="repo-link" target="_blank" rel="noopener">Source code</a></span>
+      <span>Testnet only. Transfers need a small message-fee budget, attached automatically and mostly refunded.</span>
+    </div>
+  </footer>
+
+  <script type="module" src="web/app.js"></script>
+</body>
+</html>
